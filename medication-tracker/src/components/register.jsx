@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 import firebase from "firebase";
-import Patient from "../Patient";
+import patient from "../Patient";
 
 const customStyles = {
   content: {
@@ -23,7 +23,7 @@ class Register extends React.Component {
     this.state = {
       modalIsOpen: false,
       data: {
-        username: "",
+        email: "",
         password: "",
         role: "Select Role",
         name: "",
@@ -131,8 +131,8 @@ class Register extends React.Component {
                     ))}
                   </select>
                   <input
-                    name="username"
-                    id="username"
+                    name="email"
+                    id="email"
                     style={{ marginTop: 5 }}
                     placeholder="Email"
                     type="text"
@@ -171,8 +171,8 @@ class Register extends React.Component {
                   />{" "}
                   <br />
                   <input
-                    name="patient"
-                    id="patient"
+                    name="patientName"
+                    id="patientName"
                     style={{ marginTop: 5 }}
                     placeholder="Patient Name or NA"
                     type="text"
@@ -182,7 +182,7 @@ class Register extends React.Component {
                   <br />
                   <button
                     className="btn btn-primary btn-md m-2"
-                    onClick={e => this.handleSubmit(e)}
+                    onClick={e => this.handleSubmit.bind(e)}
                   >
                     Submit
                   </button>
@@ -215,12 +215,12 @@ class Register extends React.Component {
       .ref(this.state.route)
       .push()
       .set({
-        username: this.state.data.name,
+        role: this.state.data.role,
         email: email,
         password: password,
-        role: this.state.data.role,
+        name: this.state.data.name,
         phoneNumber: this.state.data.phoneNumber,
-        patient: this.state.data.patientName
+        patientName: this.state.data.patientName
       });
   }
 
@@ -231,9 +231,9 @@ class Register extends React.Component {
     newUser = event.target.value;
     this.setState({ data: newUser });
     console.log(this.state.data);
-    this.handleRegister(this.state.data.username, this.state.data.password);
+    this.handleRegister(this.state.data.email, this.state.data.password);
     if (this.state.data.role === "patient")
-      Patient.createNewPatient(this.state.data.name, this.state.data.email);
+      patient.createNewPatient(this.state.data.name, this.state.data.email);
   };
 }
 
