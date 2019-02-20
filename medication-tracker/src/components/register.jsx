@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 import firebase from "firebase";
+import Patient from "../Patient";
 
 const customStyles = {
   content: {
@@ -74,7 +75,6 @@ class Register extends React.Component {
     let data = this.state.data;
     data[e.target.name] = e.target.value;
     this.setState({ data });
-    console.log(this.state.data);
   }
 
   render() {
@@ -232,6 +232,8 @@ class Register extends React.Component {
     this.setState({ data: newUser });
     console.log(this.state.data);
     this.handleRegister(this.state.data.username, this.state.data.password);
+    if (this.state.data.role === "patient")
+      Patient.createNewPatient(this.state.data.name, this.state.data.email);
   };
 }
 

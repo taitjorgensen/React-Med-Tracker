@@ -124,7 +124,7 @@ class Medication extends React.Component {
 
   render() {
     const totalMedications = this.state.patientMedications.length;
-    //this.state.counters.filter(c => c.value > 0).length;
+
     return (
       <React.Fragment>
         <div>
@@ -159,8 +159,8 @@ class Medication extends React.Component {
               </center>
             </form>
           </span>
-          <br />
         </div>
+        <br />
         <div className="col col-6">
           <center>
             <table className="container">

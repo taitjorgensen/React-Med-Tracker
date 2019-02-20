@@ -3,7 +3,7 @@ import firebase from "firebase";
 
 class PatientMedications extends React.Component {
   state = {
-    route: "medications",
+    route: "patientSchedule",
     medications: null,
     medicationsPopulated: false,
     patientMedications: []
@@ -42,7 +42,6 @@ class PatientMedications extends React.Component {
       };
       patientMedications.push(childData);
       i++;
-      console.log(patientMedications);
     });
     return patientMedications.map(medication => {
       return (
@@ -57,7 +56,7 @@ class PatientMedications extends React.Component {
 
   renderViewTable() {
     if (this.state.medicationsPopulated)
-      return <div className="patientMedications">{this.sortMedications()}</div>;
+      return <div className="patientMedications">{this.sortMedications}</div>;
     else return <div>There are no medications selected.</div>;
   }
 
