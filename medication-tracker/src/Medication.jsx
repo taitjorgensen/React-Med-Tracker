@@ -1,20 +1,29 @@
 import React from "react";
 import firebase from "firebase";
 import Image from "react-bootstrap/Image";
+import Counters from "./Counters";
 import PatientMedications from "./PatientMedications";
 
 class Medication extends React.Component {
-  state = {
-    route: "medications",
-    data: { name: "", dosage: "", image: "" },
-    medications: [{}],
-    patientMedications: [],
-    medicationPopulated: false,
-    patient: ""
-  };
+  // state = {
+  //   route: "medications",
+  //   data: { name: "", dosage: "", image: "" },
+  //   medications: [{}],
+  //   patientMedications: [],
+  //   medicationPopulated: false,
+  //   patient: ""
+  // };
 
   constructor(props) {
     super(props);
+    this.state = {
+      route: "medications",
+      data: { name: "", dosage: "", image: "" },
+      medications: [],
+      patientMedications: [],
+      medicationPopulated: false,
+      patient: ""
+    };
     let database = firebase.database();
 
     var childData;
@@ -164,14 +173,14 @@ class Medication extends React.Component {
         <div className="col col-6">
           <center>
             <table className="container">
-              {/* <Counters
+              <Counters
                 counters={this.state.data.counters}
                 onReset={this.handleReset}
                 onIncrement={this.handleIncrement}
                 onDecrement={this.handleDecrement}
                 onDelete={this.handleDelete}
-              /> */}
-              <PatientMedications />
+              />
+              {/* <PatientMedications /> */}
             </table>
           </center>
         </div>

@@ -36,7 +36,9 @@ class NavBar extends React.Component {
     return (
       <nav
         className="navbar navbar-expand-lg"
-        style={{ backgroundColor: "PowderBlue" }}
+        style={{
+          backgroundColor: "PowderBlue"
+        }}
       >
         <div className="navbar-brand">
           My

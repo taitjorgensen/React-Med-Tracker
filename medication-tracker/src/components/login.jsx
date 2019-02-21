@@ -60,8 +60,8 @@ class Login extends React.Component {
     return input;
   }
 
-  handleSubmit() {
-    firebase
+  async handleSubmit() {
+    await firebase
       .auth()
       .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(function() {

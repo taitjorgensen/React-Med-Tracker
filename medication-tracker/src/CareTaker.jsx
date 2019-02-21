@@ -1,7 +1,7 @@
 import React from "react";
 import firebase from "firebase";
 
-class CareTaker extends Component {
+class CareTaker extends React.Component {
   state = {
     route: "careTaker"
   };

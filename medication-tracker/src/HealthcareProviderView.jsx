@@ -1,6 +1,7 @@
 import React from "react";
 import Medication from "./Medication";
 import firebase from "firebase";
+import MedicationCounters from "./MedicationCounters";
 
 class HealthcareProvider extends React.Component {
   state = {
@@ -11,11 +12,18 @@ class HealthcareProvider extends React.Component {
   };
   constructor(props) {
     super(props);
+    // this.state = {
+    //   route: "patients",
+    //   patients: [],
+    //   patientsPopulated: false,
+    //   name: ""
+    // };
     let database = firebase.database();
     var childData;
     var user = firebase.auth().currentUser;
-    console.log(user);
+
     this.setState({ user });
+
     database.ref(this.state.route).once("value", snapshot => {
       var userPatients = [];
       let i = 0;
@@ -59,7 +67,8 @@ class HealthcareProvider extends React.Component {
 
         {this.renderPatients()}
         <br />
-        <Medication />
+        <MedicationCounters />
+        {/* <Medication /> */}
       </div>
     );
   }

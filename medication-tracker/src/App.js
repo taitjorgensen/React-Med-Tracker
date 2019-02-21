@@ -12,12 +12,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false,
+      isLoggedIn: true,
       username: ""
     };
     this.user = {
       name: "",
-      role: "healthcareProvider"
+      role: "patient"
     };
   }
 
