@@ -16,6 +16,7 @@ class App extends React.Component {
       username: ""
     };
     this.user = {
+      name: "",
       role: "healthcareProvider"
     };
   }
@@ -34,14 +35,15 @@ class App extends React.Component {
 
   verifyUser() {
     firebase.auth().onAuthStateChanged(function(user) {
-      if (user) this.setState((this.isLoggedIn = true));
+      if (user) this.setState({ isLoggedIn: true });
+      this.user = user;
       this.getUserInfo();
     });
   }
 
   getUserInfo() {
-    var username = firebase.database().ref("users/" + this.user.username);
-    this.setState((this.username = username));
+    var username = this.user.username;
+    this.setState({ username: username });
   }
 
   renderView() {

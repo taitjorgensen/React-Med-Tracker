@@ -1,6 +1,7 @@
 import React from "react";
 import Register from "./components/register";
 import Login from "./components/login";
+import firebase from "firebase";
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -8,17 +9,22 @@ class NavBar extends React.Component {
     this.state = {
       isLoggedIn: false
     };
+    this.user = {
+      name: "",
+      role: ""
+    };
   }
 
   renderView() {
-    var user = { name: "Tait" };
-    if (this.state.isLoggedIn)
+    const user = firebase.auth().currentUser;
+    if (user) {
+      this.setState({ isLoggedIn: true });
       return (
         <div>
-          <h1>Hello, {user.name}</h1>
+          <h1>Hello, {this.user.name}</h1>
         </div>
       );
-    else
+    } else
       return (
         <React.Fragment>
           <Login /> <Register />

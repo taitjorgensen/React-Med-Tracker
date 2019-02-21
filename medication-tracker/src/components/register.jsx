@@ -204,8 +204,16 @@ class Register extends React.Component {
   handleRegister(email, password) {
     firebase
       .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .catch(error => {
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(function() {
+        return firebase
+          .auth()
+          .signInWithEmailAndPassword(
+            this.state.data.email,
+            this.state.data.password
+          );
+      })
+      .catch(function(error) {
         var errorCode = error.code;
         var errorMessage = error.message;
         return errorCode && errorMessage;

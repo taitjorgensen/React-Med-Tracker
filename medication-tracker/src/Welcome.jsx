@@ -6,7 +6,10 @@ class Welcome extends React.Component {
     return (
       <center>
         <div className="col col-8">
-          <h1>Welcome to MyRx</h1>
+          <h1>
+            Welcome to My
+            <span className="fas fa-file-prescription" />
+          </h1>
           <h3>
             Medication tracking to provide a safer daily patient experience.
           </h3>

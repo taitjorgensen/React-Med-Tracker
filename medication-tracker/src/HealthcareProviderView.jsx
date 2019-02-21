@@ -6,12 +6,16 @@ class HealthcareProvider extends React.Component {
   state = {
     route: "patients",
     patients: [],
-    patientsPopulated: false
+    patientsPopulated: false,
+    name: ""
   };
   constructor(props) {
     super(props);
     let database = firebase.database();
     var childData;
+    var user = firebase.auth().currentUser;
+    console.log(user);
+    this.setState({ user });
     database.ref(this.state.route).once("value", snapshot => {
       var userPatients = [];
       let i = 0;
@@ -20,8 +24,9 @@ class HealthcareProvider extends React.Component {
           key: i,
           value: childSnapshot.val()
         };
-        userPatients.push(childData);
-        i++;
+        if (childData.healthcareProvider === this.state.name)
+          userPatients.push(childData) && i++;
+        else i++;
       });
       this.setState({ patients: userPatients });
       this.setState({ patientsPopulated: true });

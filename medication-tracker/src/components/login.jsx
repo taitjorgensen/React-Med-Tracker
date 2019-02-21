@@ -1,5 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
+import firebase from "firebase";
 
 const customStyles = {
   content: {
@@ -21,6 +22,11 @@ class Login extends React.Component {
     super(props);
     this.state = {
       modalIsOpen: false,
+      isLoggedIn: false,
+      user: {
+        name: "",
+        role: ""
+      },
       data: {
         email: "",
         password: ""
@@ -28,9 +34,11 @@ class Login extends React.Component {
       id: "Login",
       instructions: "Please enter information to login"
     };
+
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
   openModal() {
     this.setState({ modalIsOpen: true });
@@ -50,6 +58,53 @@ class Login extends React.Component {
       <input id={{ ...this.state.data }} style={{ marginRight: 20 }} />
     );
     return input;
+  }
+
+  handleSubmit() {
+    firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(function() {
+        return firebase
+          .auth()
+          .signInWithEmailAndPassword(
+            this.state.data.email,
+            this.state.data.password
+          );
+      })
+      .catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        return errorCode && errorMessage;
+      });
+    var user = firebase.auth().currentUser;
+
+    if (user) {
+      this.setState({ isLoggedIn: true });
+    } else {
+      this.displayError();
+    }
+  }
+
+  displayError() {
+    if (this.state.isLoggedIn === false)
+      return (
+        <Modal
+          isOpen="true"
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          style={customStyles}
+          contentLable="Please try again or Register as New User"
+          id="warning"
+        >
+          <button
+            className="btn btn-danger btn-md m-2"
+            onClick={this.closeModal}
+          >
+            Close
+          </button>
+        </Modal>
+      );
   }
 
   render() {
@@ -86,7 +141,7 @@ class Login extends React.Component {
               <br />
               <button
                 className="btn btn-primary btn-md m-2"
-                onClick={this.closeModal.bind(this)}
+                onClick={this.handleSubmit.bind(this)}
               >
                 Submit
               </button>
