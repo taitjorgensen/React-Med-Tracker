@@ -38,7 +38,7 @@ class Login extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.handleSubmit = this.handleSubmit.bind(this);
   }
   openModal() {
     this.setState({ modalIsOpen: true });
@@ -60,8 +60,11 @@ class Login extends React.Component {
     return input;
   }
 
-  async handleSubmit() {
-    await firebase
+  handleSubmit = event => {
+    event.preventDefault();
+    console.log(event.target.value);
+    this.setState({ data: event.target.value });
+    firebase
       .auth()
       .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(function() {
@@ -84,7 +87,7 @@ class Login extends React.Component {
     } else {
       this.displayError();
     }
-  }
+  };
 
   displayError() {
     if (this.state.isLoggedIn === false)
@@ -141,7 +144,7 @@ class Login extends React.Component {
               <br />
               <button
                 className="btn btn-primary btn-md m-2"
-                onClick={this.handleSubmit.bind(this)}
+                onClick={e => this.handleSubmit.bind(e)}
               >
                 Submit
               </button>

@@ -1,24 +1,19 @@
 import React from "react";
 import Register from "./components/register";
 import Login from "./components/login";
-import firebase from "firebase";
 
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false
+      isLoggedIn: this.props.isLoggedIn
     };
-    this.user = {
-      name: "",
-      role: ""
-    };
+
+    this.user = props.user;
   }
 
   renderView() {
-    const user = firebase.auth().currentUser;
-    if (user) {
-      this.setState({ isLoggedIn: true });
+    if (this.state.isLoggedIn) {
       return (
         <div>
           <h1>Hello, {this.user.name}</h1>

@@ -16,6 +16,7 @@ class Counter extends Component {
               <span />
               <img
                 src={require(`${this.props.counter.image}`)}
+                alt="medication"
                 height="50"
                 width="50"
               />

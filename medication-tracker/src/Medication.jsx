@@ -2,7 +2,6 @@ import React from "react";
 import firebase from "firebase";
 import Image from "react-bootstrap/Image";
 import Counters from "./Counters";
-import PatientMedications from "./PatientMedications";
 
 class Medication extends React.Component {
   // state = {

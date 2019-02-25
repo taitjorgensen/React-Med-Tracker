@@ -13,11 +13,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       isLoggedIn: true,
-      username: ""
-    };
-    this.user = {
-      name: "",
-      role: "patient"
+      user: {}
     };
   }
 
@@ -33,33 +29,29 @@ class App extends React.Component {
     firebase.initializeApp(config);
   }
 
-  verifyUser() {
+  verifyUser = () => {
     firebase.auth().onAuthStateChanged(function(user) {
-      if (user) this.setState({ isLoggedIn: true });
-      this.user = user;
-      this.getUserInfo();
+      if (user) this.setState({ isLoggedIn: true, user: user });
+      else this.setState({ user: null });
     });
-  }
+  };
 
-  getUserInfo() {
-    var username = this.user.username;
-    this.setState({ username: username });
-  }
-
-  renderView() {
-    this.verifyUser();
+  renderView = () => {
+    var user = this.state.user;
     if (this.state.isLoggedIn === false) return <Welcome />;
-    else if (this.user.role === "patient") return <Patient />;
-    else if (this.user.role === "healthcareProvider")
-      return <HealthcareProvider />;
-    else if (this.user.role === "careTaker") return <CareTaker />;
+    else if (user.role === "patient") return <Patient user={this.state.user} />;
+    else if (user.role === "healthcareProvider")
+      return <HealthcareProvider user={this.state.user} />;
+    else if (user.role === "careTaker")
+      return <CareTaker user={this.state.user} />;
     else return <Welcome />;
-  }
+  };
 
   render() {
+    this.verifyUser();
     return (
       <React.Fragment>
-        <NavBar />
+        <NavBar user={this.state.user} isLoggedIn={this.state.isLoggedin} />
         <br />
         <main className="container">{this.renderView()}</main>
       </React.Fragment>

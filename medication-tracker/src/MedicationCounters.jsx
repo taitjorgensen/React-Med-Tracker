@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Counters from "./Counters";
+import patient from "./Patient";
 import firebase from "firebase";
 import axios from "axios";
 
@@ -58,6 +59,12 @@ class MedicationCounters extends Component {
     data: { name: "", dosage: "", quantity: "", image: "", time: "" },
     errors: {}
   };
+
+  constructor(props) {
+    super(props);
+    this.handleDataChange = this.handleDataChange.bind(this);
+  }
+
   handleIncrement = counter => {
     const counters = [...this.state.counters];
     const index = counters.indexOf(counter);
@@ -127,9 +134,9 @@ class MedicationCounters extends Component {
   };
 
   handleChange = event => {
-    const errors = { ...this.state.errors };
+    // const errors = { ...this.state.errors };
     const input = event.target.value;
-    console.log("Input  " + input);
+    // console.log("Input  " + input);
     // const errorMessage = this.validateProperty(input);
     // if (errorMessage) errors[input.name] = errorMessage;
     // else delete errors[input.name];
@@ -138,10 +145,16 @@ class MedicationCounters extends Component {
     this.setState({ data });
   };
 
+  handleDataChange(e) {
+    let data = this.state.data;
+    data[e.target.name] = e.target.value;
+    this.setState({ data });
+  }
+
   render() {
     const totalCounters = this.state.counters.filter(c => c.quantity > 0)
       .length;
-    const timeOption = this.state.counters._id;
+
     return (
       <React.Fragment>
         <div>
@@ -157,10 +170,31 @@ class MedicationCounters extends Component {
             >
               {totalCounters}
             </span>
-            <span style={{ padding: "20px" }}> </span>
-            <button className="btn btn-primary" style={{ fontSize: "30px" }}>
+            <span style={{ padding: "20px" }}>{"  "}</span>
+            <button
+              className="btn btn-primary"
+              onClick={this.handleSubmit}
+              style={{ fontSize: "30px" }}
+            >
               Submit
             </button>
+            <div className="col col-2">
+              <select
+                name="timeToTake"
+                id="timeToTake"
+                className="form-control"
+                style={{ fontSize: "20px" }}
+                onChange={this.handleDataChange}
+                value={this.input}
+              >
+                <option value="" />
+                {this.state.timeForMeds.map(time => (
+                  <option key={time.key} value={time.value}>
+                    {time.value}
+                  </option>
+                ))}
+              </select>
+            </div>
           </span>
           <div className="container">
             <Counters
@@ -176,6 +210,48 @@ class MedicationCounters extends Component {
       </React.Fragment>
     );
   }
+  handleRegister(email, password) {
+    firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(function() {
+        return firebase
+          .auth()
+          .signInWithEmailAndPassword(
+            this.state.data.email,
+            this.state.data.password
+          );
+      })
+      .catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        return errorCode && errorMessage;
+      });
+    firebase
+      .database()
+      .ref(this.state.route)
+      .push()
+      .set({
+        role: this.state.data.role,
+        email: email,
+        password: password,
+        name: this.state.data.name,
+        phoneNumber: this.state.data.phoneNumber,
+        patientName: this.state.data.patientName
+      });
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.closeModal();
+    var newUser = {};
+    newUser = event.target.value;
+    this.setState({ data: newUser });
+    console.log(this.state.data);
+    this.handleRegister(this.state.data.email, this.state.data.password);
+    if (this.state.data.role === "patient")
+      patient.createNewPatient(this.state.data.name, this.state.data.email);
+  };
 }
 
 export default MedicationCounters;

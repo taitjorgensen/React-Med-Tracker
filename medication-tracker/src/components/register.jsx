@@ -43,8 +43,8 @@ class Register extends React.Component {
   }
 
   async componentDidMount() {
-    const { data: value } = await firebase.database().ref(this.state.route);
-    this.setState({ value });
+    const { value } = await firebase.database().ref(this.state.route);
+    this.setState({ data: value });
   }
 
   openModal() {
@@ -238,7 +238,6 @@ class Register extends React.Component {
     var newUser = {};
     newUser = event.target.value;
     this.setState({ data: newUser });
-    console.log(this.state.data);
     this.handleRegister(this.state.data.email, this.state.data.password);
     if (this.state.data.role === "patient")
       patient.createNewPatient(this.state.data.name, this.state.data.email);
