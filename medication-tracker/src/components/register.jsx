@@ -25,7 +25,7 @@ class Register extends React.Component {
       data: {
         email: "",
         password: "",
-        role: "Select Role",
+        role: "",
         name: "",
         phoneNumber: "",
         patientName: ""
@@ -39,13 +39,14 @@ class Register extends React.Component {
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDataSelect = this.handleDataSelect.bind(this);
     this.handleDataChange = this.handleDataChange.bind(this);
   }
 
-  async componentDidMount() {
-    const { value } = await firebase.database().ref(this.state.route);
-    this.setState({ data: value });
-  }
+  // async componentDidMount() {
+  //   const { value } = await firebase.database().ref(this.state.route);
+  //   this.setState({ data: value });
+  // }
 
   openModal() {
     this.setState({ modalIsOpen: true });
@@ -71,6 +72,12 @@ class Register extends React.Component {
     else return null;
   }
 
+  handleDataSelect(e) {
+    let data = this.state.data;
+    data[e.target.id] = e.target.value;
+    this.setState({ data });
+  }
+
   handleDataChange(e) {
     let data = this.state.data;
     data[e.target.name] = e.target.value;
@@ -79,14 +86,14 @@ class Register extends React.Component {
 
   render() {
     let options = [
-      { key: 1, id: "Patient", value: "patient", name: "Patient" },
+      { key: 1, id: "role", value: "patient", name: "Patient" },
       {
         key: 2,
-        id: "HealthcareProvider",
-        value: "healthcareWorker",
+        id: "role",
+        value: "healthcareProvider",
         name: "Healthcare Provider"
       },
-      { key: 3, id: "CareTaker", value: "careTaker", name: "Care Taker" }
+      { key: 3, id: "role", value: "careTaker", name: "Care Taker" }
     ];
     return (
       <div>
@@ -106,6 +113,7 @@ class Register extends React.Component {
             style={customStyles}
             contentLabel="MyRx Modal"
             onSubmit={this.handleSubmit}
+            id="Register-Modal"
           >
             <h2 ref={subtitle => (this.subtitle = subtitle)}>
               {this.state.id}
@@ -113,14 +121,14 @@ class Register extends React.Component {
             <center>
               <div>{this.state.instructions}</div>
 
-              <form id="registration" onSubmit={this.handleSubmit}>
+              <form id="register-form" onSubmit={this.handleSubmit}>
                 <div id="firebaseui-auth-container">
                   <select
                     name="role"
                     id="role"
                     className="form-control"
                     style={{ marginTop: 5 }}
-                    onChange={this.handleDataChange}
+                    onChange={this.handleDataSelect.bind(this)}
                     value={this.input}
                   >
                     <option value="" />
@@ -137,7 +145,7 @@ class Register extends React.Component {
                     placeholder="Email"
                     type="text"
                     value={this.input}
-                    onChange={this.handleDataChange}
+                    onChange={this.handleDataChange.bind(this)}
                   />{" "}
                   <br />
                   <input
@@ -147,7 +155,7 @@ class Register extends React.Component {
                     placeholder="Password"
                     type="text"
                     value={this.input}
-                    onChange={this.handleDataChange}
+                    onChange={this.handleDataChange.bind(this)}
                   />{" "}
                   <br />
                   <input
@@ -157,7 +165,7 @@ class Register extends React.Component {
                     placeholder="Name"
                     type="text"
                     value={this.input}
-                    onChange={this.handleDataChange}
+                    onChange={this.handleDataChange.bind(this)}
                   />{" "}
                   <br />
                   <input
@@ -167,7 +175,7 @@ class Register extends React.Component {
                     placeholder="Phone Number"
                     type="text"
                     value={this.input}
-                    onChange={this.handleDataChange}
+                    onChange={this.handleDataChange.bind(this)}
                   />{" "}
                   <br />
                   <input
@@ -177,12 +185,12 @@ class Register extends React.Component {
                     placeholder="Patient Name or NA"
                     type="text"
                     value={this.input}
-                    onChange={this.handleDataChange}
+                    onChange={this.handleDataChange.bind(this)}
                   />{" "}
                   <br />
                   <button
                     className="btn btn-primary btn-md m-2"
-                    onClick={e => this.handleSubmit.bind(e)}
+                    onClick={this.handleSubmit}
                   >
                     Submit
                   </button>
@@ -203,6 +211,18 @@ class Register extends React.Component {
 
   handleRegister(email, password) {
     firebase
+      .database()
+      .ref(this.state.route)
+      .push()
+      .set({
+        role: this.state.data.role,
+        email: email,
+        password: password,
+        name: this.state.data.name,
+        phoneNumber: this.state.data.phoneNumber,
+        patientName: this.state.data.patientName
+      });
+    firebase
       .auth()
       .setPersistence(firebase.auth.Auth.Persistence.SESSION)
       .then(function() {
@@ -217,18 +237,6 @@ class Register extends React.Component {
         var errorCode = error.code;
         var errorMessage = error.message;
         return errorCode && errorMessage;
-      });
-    firebase
-      .database()
-      .ref(this.state.route)
-      .push()
-      .set({
-        role: this.state.data.role,
-        email: email,
-        password: password,
-        name: this.state.data.name,
-        phoneNumber: this.state.data.phoneNumber,
-        patientName: this.state.data.patientName
       });
   }
 

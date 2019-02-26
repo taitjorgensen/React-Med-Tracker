@@ -9,7 +9,7 @@ class HealthcareProvider extends React.Component {
       route: "patients",
       patients: [],
       patientsPopulated: false,
-      name: "Steven Strange",
+      name: "",
       patient: ""
     };
     this.renderPatients = this.renderPatients.bind(this);

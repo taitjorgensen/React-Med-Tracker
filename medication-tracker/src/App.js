@@ -12,7 +12,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: true,
+      isLoggedIn: false,
       user: {}
     };
   }
@@ -29,12 +29,40 @@ class App extends React.Component {
     firebase.initializeApp(config);
   }
 
+  componentWillUpdate() {
+    console.log("Component DID mount", this.state.user);
+    this.verifyUser();
+  }
+
   verifyUser = () => {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) this.setState({ isLoggedIn: true, user: user });
       else this.setState({ user: null });
     });
   };
+
+  // verifyLogin() {
+  //   var ui = new firebase.auth.AuthUI(firebase.auth());
+  //   var uiConfig = {
+  //     callbacks: {
+  //       signInSuccessWithAuthResult: function() {
+  //         this.setState({ isLoggedIn: true });
+  //       },
+  //       uiShown: function() {
+  //         document.getElementById("loader").style.diplay = "none";
+  //       }
+  //     },
+  //     signInFlow: "popup",
+  //     signInSuccessUrl: "localhost:3000",
+  //     signInOptions: [
+  //       {
+  //         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+  //         requireDisplayName: false
+  //       }
+  //     ]
+  //   };
+  //   ui.start("#firebase-auth-container", uiConfig);
+  // }
 
   renderView = () => {
     var user = this.state.user;
@@ -51,7 +79,7 @@ class App extends React.Component {
     this.verifyUser();
     return (
       <React.Fragment>
-        <NavBar user={this.state.user} isLoggedIn={this.state.isLoggedin} />
+        <NavBar user={this.state.user} />
         <br />
         <main className="container">{this.renderView()}</main>
       </React.Fragment>

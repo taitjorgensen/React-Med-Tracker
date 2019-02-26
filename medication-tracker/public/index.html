@@ -21,12 +21,16 @@
       integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
       crossorigin="anonymous"
     />
-    <script src="node_modules/firebaseui/dist/firebaseui.js"></script>
-    <link
+
+    <!-- <link
       type="text/css"
       rel="stylesheet"
       href="node_modules/firebaseui/dist/firebaseui.css"
     />
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-database.js"></script>
+    <script src="node_modules/firebaseui/dist/firebaseui.js"></script> -->
     <title className="fas fa-file-prescription">
       MyRx
     </title>
@@ -34,9 +38,9 @@
   <body>
     <noscript> You need to enable JavaScript to run this app. </noscript>
     <div id="root"></div>
-
-    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-database.js"></script>
+    <div id="login-form"></div>
+    <div id="register-form"></div>
+    <div id="firebaseui-auth-container"></div>
+    <div id="loading"></div>
   </body>
 </html>

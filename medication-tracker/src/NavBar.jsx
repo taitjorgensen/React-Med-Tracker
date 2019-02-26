@@ -12,11 +12,21 @@ class NavBar extends React.Component {
     this.user = props.user;
   }
 
+  logoutUser() {
+    //logout of Firebase
+  }
+
   renderView() {
     if (this.state.isLoggedIn) {
       return (
         <div>
           <h1>Hello, {this.user.name}</h1>
+          <h2
+            onClick={this.logoutUser}
+            style={{ marginRight: 20, cursor: "pointer" }}
+          >
+            Logout
+          </h2>
         </div>
       );
     } else
