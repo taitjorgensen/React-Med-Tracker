@@ -13,8 +13,11 @@ class App extends React.Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      user: {}
+      user: null
     };
+    this.handleUserLogin = this.handleUserLogin.bind(this);
+    this.handleUserRegistration = this.handleUserRegistration.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   componentWillMount() {
@@ -29,17 +32,16 @@ class App extends React.Component {
     firebase.initializeApp(config);
   }
 
-  componentWillUpdate() {
-    console.log("Component DID mount", this.state.user);
-    this.verifyUser();
-  }
+  // componentWillUpdate() {
+  //   this.verifyUser();
+  // }
 
-  verifyUser = () => {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) this.setState({ isLoggedIn: true, user: user });
-      else this.setState({ user: null });
-    });
-  };
+  // verifyUser = () => {
+  //   firebase.auth().onAuthStateChanged(function(user) {
+  //     if (user) this.setState({ isLoggedIn: true, user: user });
+  //     else this.setState({ user: null });
+  //   });
+  // };
 
   // verifyLogin() {
   //   var ui = new firebase.auth.AuthUI(firebase.auth());
@@ -63,9 +65,21 @@ class App extends React.Component {
   //   };
   //   ui.start("#firebase-auth-container", uiConfig);
   // }
+  handleUserLogin(user) {
+    this.setState({ isLoggedIn: true, user: user });
+  }
+
+  handleUserRegistration(user) {
+    this.setState({ isLoggedIn: true, user: user });
+  }
+
+  handleLogout() {
+    this.setState({ isLoggedIn: false });
+  }
 
   renderView = () => {
     var user = this.state.user;
+    console.log(user);
     if (this.state.isLoggedIn === false) return <Welcome />;
     else if (user.role === "patient") return <Patient user={this.state.user} />;
     else if (user.role === "healthcareProvider")
@@ -76,10 +90,14 @@ class App extends React.Component {
   };
 
   render() {
-    this.verifyUser();
+    // this.verifyUser();
     return (
       <React.Fragment>
-        <NavBar user={this.state.user} />
+        <NavBar
+          handleUserLogin={this.handleUserLogin}
+          handleUserRegistration={this.handleUserRegistration}
+          handleLogout={this.handleLogout}
+        />
         <br />
         <main className="container">{this.renderView()}</main>
       </React.Fragment>

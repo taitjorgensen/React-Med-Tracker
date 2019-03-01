@@ -14,7 +14,7 @@ const customStyles = {
   }
 };
 
-Modal.setAppElement(document.getElementById("#login-form"));
+Modal.setAppElement(document.getElementById("#root"));
 
 class Login extends React.Component {
   constructor(props) {
@@ -39,6 +39,7 @@ class Login extends React.Component {
     this.closeModal = this.closeModal.bind(this);
     this.handleDataChange = this.handleDataChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.chooseUser = this.chooseUser.bind(this);
   }
   openModal() {
     this.setState({ modalIsOpen: true });
@@ -62,15 +63,54 @@ class Login extends React.Component {
 
   handleDataChange(e) {
     let data = this.state.data;
-    data[e.target.id] = e.target.value;
+    data[e.target.name] = e.target.value;
     this.setState({ data });
   }
 
-  handleSubmit = event => {
+  chooseUser(email) {
+    console.log(email);
+    var user = { name: "", role: "" };
+    if (email === "drstrange@avengers.com")
+      return (
+        (user = { name: "Steven Strange", role: "healthcareProvider" }),
+        this.setState(
+          {
+            user: {
+              name: "Steven Strange",
+              role: "healthcareProvider"
+            }
+          },
+          this.props.handleLogin(user)
+        )
+      );
+    else if (email === "spiderman@avengers.com")
+      return (
+        (user = { name: "Peter Parker", role: "patient" }),
+        this.setState(
+          {
+            user: { name: "Peter Parker", role: "patient" }
+          },
+          this.props.handleLogin(user)
+        )
+      );
+    else
+      return (
+        (user = { name: "Tony Stark", role: "careTaker" }),
+        this.setState(
+          {
+            user: { name: "Tony Stark", role: "careTaker" }
+          },
+          this.props.handleLogin(user)
+        )
+      );
+  }
+
+  handleSubmit(event) {
     event.preventDefault();
     this.closeModal();
-    this.setState({ data: event.target.value });
-    console.log(this.state.data);
+    var userData = {};
+    userData = event.target.value;
+    this.setState({ data: userData }, this.chooseUser(this.state.data.email));
     firebase
       .auth()
       .signInWithEmailAndPassword(
@@ -80,16 +120,15 @@ class Login extends React.Component {
       .then(value => {
         console.log("value", value);
         this.setState({ isLoggedIn: true });
-        console.log("state", this.state);
       })
       .catch(function(error) {
         var errorCode = error.code;
         var errorMessage = error.message;
-        console.log(errorCode + errorMessage);
-        this.displayError(errorMessage);
+        console.log(errorCode + " " + errorMessage);
+        // this.displayError(errorMessage);
         return errorCode && errorMessage;
       });
-  };
+  }
 
   displayError(error) {
     return (
@@ -134,33 +173,39 @@ class Login extends React.Component {
 
             <div>{this.state.instructions}</div>
             <form onSubmit={this.handleSubmit} id="login-form">
-              <input
-                id="email"
-                onChange={this.handleDataChange}
-                placeholder="Email"
-                required
-              />{" "}
-              <br />
-              <input
-                id="password"
-                style={{ marginTop: 5 }}
-                onChange={this.handleDataChange}
-                placeholder="Password"
-                required
-              />{" "}
-              <br />
-              <button
-                className="btn btn-primary btn-md m-2"
-                onClick={this.handleSubmit}
-              >
-                Submit
-              </button>
-              <button
-                className="btn btn-danger btn-md m-2"
-                onClick={this.closeModal}
-              >
-                Cancel
-              </button>
+              <div className="user-login">
+                <input
+                  name="email"
+                  id="email"
+                  onChange={this.handleDataChange.bind(this)}
+                  placeholder="Email"
+                  type="text"
+                  value={this.input}
+                />{" "}
+                <br />
+                <input
+                  name="password"
+                  id="password"
+                  style={{ marginTop: 5 }}
+                  onChange={this.handleDataChange.bind(this)}
+                  placeholder="Password"
+                  type="text"
+                  value={this.input}
+                />{" "}
+                <br />
+                <button
+                  className="btn btn-primary btn-md m-2"
+                  onClick={this.handleSubmit}
+                >
+                  Submit
+                </button>
+                <button
+                  className="btn btn-danger btn-md m-2"
+                  onClick={this.closeModal}
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           </Modal>
         </div>

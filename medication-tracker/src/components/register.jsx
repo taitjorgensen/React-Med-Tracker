@@ -22,6 +22,7 @@ class Register extends React.Component {
     super(props);
     this.state = {
       modalIsOpen: false,
+      route: "users",
       data: {
         email: "",
         password: "",
@@ -32,8 +33,7 @@ class Register extends React.Component {
       },
       errors: {},
       id: "Register New User",
-      instructions: "Please enter information to register",
-      route: "users"
+      instructions: "Please enter information to register"
     };
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
@@ -209,29 +209,30 @@ class Register extends React.Component {
     );
   }
 
-  handleRegister(email, password) {
+  addUserToDb = data => {
+    console.log(data);
     firebase
       .database()
       .ref(this.state.route)
       .push()
       .set({
-        role: this.state.data.role,
-        email: email,
-        password: password,
-        name: this.state.data.name,
-        phoneNumber: this.state.data.phoneNumber,
-        patientName: this.state.data.patientName
+        role: data.role,
+        email: data.email,
+        password: data.password,
+        name: data.name,
+        phoneNumber: data.phoneNumber,
+        patientName: data.patientName
       });
+  };
+
+  handleRegister(email, password) {
+    var newUser;
     firebase
       .auth()
-      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
-      .then(function() {
-        return firebase
-          .auth()
-          .signInWithEmailAndPassword(
-            this.state.data.email,
-            this.state.data.password
-          );
+      .createUserWithEmailAndPassword(email, password)
+      .then(cred => {
+        newUser = cred.user;
+        console.log(newUser);
       })
       .catch(function(error) {
         var errorCode = error.code;
@@ -247,6 +248,9 @@ class Register extends React.Component {
     newUser = event.target.value;
     this.setState({ data: newUser });
     this.handleRegister(this.state.data.email, this.state.data.password);
+    this.addUserToDb(this.state.data);
+    var user = (newUser.name, newUser.role);
+    this.props.handleLogin(user);
     if (this.state.data.role === "patient")
       patient.createNewPatient(this.state.data.name, this.state.data.email);
   };

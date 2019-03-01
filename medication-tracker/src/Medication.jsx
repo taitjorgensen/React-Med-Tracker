@@ -4,15 +4,6 @@ import Image from "react-bootstrap/Image";
 import Counters from "./Counters";
 
 class Medication extends React.Component {
-  // state = {
-  //   route: "medications",
-  //   data: { name: "", dosage: "", image: "" },
-  //   medications: [{}],
-  //   patientMedications: [],
-  //   medicationPopulated: false,
-  //   patient: ""
-  // };
-
   constructor(props) {
     super(props);
     this.state = {

@@ -6,33 +6,48 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: this.props.isLoggedIn
+      isLoggedIn: false,
+      user: {}
     };
-
-    this.user = props.user;
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleRegistration = this.handleRegistration.bind(this);
+    this.logoutUser = this.logoutUser.bind(this);
   }
 
   logoutUser() {
-    //logout of Firebase
+    this.setState({ isLoggedIn: false });
+    this.props.handleLogout();
+  }
+
+  handleLogin(user) {
+    this.setState({ isLoggedIn: true, user: user });
+    this.props.handleUserLogin(user);
+  }
+
+  handleRegistration(user) {
+    this.setState({ isLoggedIn: true, user: user });
+    this.props.handleUserRegistration(user);
   }
 
   renderView() {
-    if (this.state.isLoggedIn) {
+    if (this.state.isLoggedIn === true) {
       return (
-        <div>
-          <h1>Hello, {this.user.name}</h1>
-          <h2
-            onClick={this.logoutUser}
-            style={{ marginRight: 20, cursor: "pointer" }}
-          >
-            Logout
-          </h2>
-        </div>
+        <span className="navBar">
+          <h3>
+            Hello, {this.state.user.name}
+            <h3
+              onClick={this.logoutUser}
+              style={{ marginRight: 10, cursor: "pointer" }}
+            >
+              Logout
+            </h3>
+          </h3>
+        </span>
       );
     } else
       return (
         <React.Fragment>
-          <Login /> <Register />
+          <Login handleLogin={this.handleLogin} /> <Register />
         </React.Fragment>
       );
   }

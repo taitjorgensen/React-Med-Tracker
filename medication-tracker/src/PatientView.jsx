@@ -1,14 +1,19 @@
 import React from "react";
-import PatientMedications from "./PatientMedications";
+
+import Medications from "./Medications";
 
 class Patient extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   render() {
     return (
       <div>
-        <h2>Patient View</h2>
-
-        <PatientMedications />
+        {/* <h2>{this.props.user.name}'s</h2> */}
+        <Medications />
+        {/* <PatientMedications /> */}
+        {/* <MedicationCounters /> */}
       </div>
     );
   }

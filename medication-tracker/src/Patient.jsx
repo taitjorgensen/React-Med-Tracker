@@ -1,5 +1,6 @@
 import React from "react";
 import firebase from "firebase";
+import MedicationCounters from "./MedicationCounters";
 
 class Patient extends React.Component {
   constructor(props) {
@@ -33,7 +34,14 @@ class Patient extends React.Component {
   };
 
   render() {
-    return <div className="patient">{this.state.data.name}</div>;
+    return (
+      <React.Fragment>
+        <div>
+          <div className="patient">{this.state.data.name}</div>
+          <MedicationCounters />
+        </div>
+      </React.Fragment>
+    );
   }
 }
 const patient = new Patient();
