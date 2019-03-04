@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Medications extends Component {
+class PatientMedication extends Component {
   state = {
     counters: [
       {
@@ -123,113 +123,59 @@ class Medications extends Component {
   render() {
     // const totalCounters = this.state.counters.filter(c => c.quantity > 0)
     //   .length;
-    if (this.state.issueSendAlert)
-      return (
-        <div>
-          <h1>Alert sent to your HealthCare Provider and Care Taker.</h1>
-          <p>
-            Please contact your Care Provider if you need immediate assistance.
-          </p>
-        </div>
-      );
-    else if (this.state.medicationTaken)
-      return (
-        <div>
-          <h2>You are up to date on your medications.</h2>
-          <p>
-            To view another time, please click the button below and you will be
-            able to select the time you wish to view.
-          </p>
-          <button
-            className="btn btn-primary"
-            onClick={this.handleReset}
-            style={{ fontSize: "30px" }}
+    return (
+      <div>
+        <form className="col col-2" onChange={this.handleTimeChange}>
+          <select
+            name="timeSelection"
+            id="timeToTake"
+            className="form-control"
+            style={{ fontSize: "20px" }}
+            onChange={this.handleDataChange}
+            value={this.input}
           >
-            Select New Time
-          </button>
-        </div>
-      );
-    else if (this.state.timeSelection === null)
-      return (
-        <div>
-          <span>
-            <h2>Select which time option to view medications to take:</h2>
-            <form className="col col-2" onChange={this.handleTimeChange}>
-              <select
-                name="timeSelection"
-                id="timeToTake"
-                className="form-control"
-                style={{ fontSize: "20px" }}
-                onChange={this.handleDataChange}
-                value={this.input}
-              >
-                <option value="" />
-                {this.state.timeForMeds.map(time => (
-                  <option key={time.key} value={time.value}>
-                    {time.value}
-                  </option>
-                ))}
-              </select>
-            </form>
-          </span>
+            <option value="" />
+            {this.state.timeForMeds.map(time => (
+              <option key={time.key} value={time.value}>
+                {time.value}
+              </option>
+            ))}
+          </select>
+        </form>
+        <span
+          className="fas fa-prescription-bottle-alt"
+          style={{ fontSize: "50px" }}
+        />
+        <span style={{ fontSize: "50px" }}>
+          {" "}
+          Medications to Take at {this.state.timeSelection}:{" "}
+        </span>
+        <span
+          className="badge badge-pill badge-primary"
+          style={{ fontSize: "30px" }}
+        >
+          {this.state.totalCounters}
+        </span>
+        <span style={{ padding: "20px" }}>{"  "}</span>
 
-          <span />
-        </div>
-      );
-    else
-      return (
-        <div>
-          <form className="col col-2" onChange={this.handleTimeChange}>
-            <select
-              name="timeSelection"
-              id="timeToTake"
-              className="form-control"
-              style={{ fontSize: "20px" }}
-              onChange={this.handleDataChange}
-              value={this.input}
-            >
-              <option value="" />
-              {this.state.timeForMeds.map(time => (
-                <option key={time.key} value={time.value}>
-                  {time.value}
-                </option>
-              ))}
-            </select>
-          </form>
-          <span
-            className="fas fa-prescription-bottle-alt"
-            style={{ fontSize: "50px" }}
-          />
-          <span style={{ fontSize: "50px" }}>
-            {" "}
-            Medications to Take at {this.state.timeSelection}:{" "}
-          </span>
-          <span
-            className="badge badge-pill badge-primary"
-            style={{ fontSize: "30px" }}
-          >
-            {this.state.totalCounters}
-          </span>
-          <span style={{ padding: "20px" }}>{"  "}</span>
-
-          <div>{this.listMedications()}</div>
-          <button
-            className="btn btn-success"
-            onClick={this.handleComplete}
-            style={{ fontSize: "30px" }}
-          >
-            Complete
-          </button>
-          {"          "}
-          <button
-            className="btn btn-danger"
-            onClick={this.handleIssue}
-            style={{ fontSize: "30px" }}
-          >
-            Issue
-          </button>
-        </div>
-      );
+        <div>{this.listMedications()}</div>
+        <button
+          className="btn btn-success"
+          onClick={this.handleComplete}
+          style={{ fontSize: "30px" }}
+        >
+          Complete
+        </button>
+        {"          "}
+        <button
+          className="btn btn-danger"
+          onClick={this.handleIssue}
+          style={{ fontSize: "30px" }}
+        >
+          Issue
+        </button>
+      </div>
+    );
   }
 
   listMedications = () => {
@@ -320,4 +266,4 @@ class Medications extends Component {
   };
 }
 
-export default Medications;
+export default PatientMedication;

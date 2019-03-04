@@ -12,6 +12,7 @@ class NavBar extends React.Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleRegistration = this.handleRegistration.bind(this);
     this.logoutUser = this.logoutUser.bind(this);
+    this.renderView = this.renderView.bind(this);
   }
 
   logoutUser() {
@@ -47,7 +48,8 @@ class NavBar extends React.Component {
     } else
       return (
         <React.Fragment>
-          <Login handleLogin={this.handleLogin} /> <Register />
+          <Login handleLogin={this.handleLogin} />{" "}
+          <Register handleRegistration={this.handleRegistration} />
         </React.Fragment>
       );
   }
@@ -62,7 +64,11 @@ class NavBar extends React.Component {
       >
         <div className="navbar-brand">
           My
-          <span className="fas fa-file-prescription" />{" "}
+          <span
+            onClick={this.renderView}
+            style={{ marginRight: 10, cursor: "pointer" }}
+            className="fas fa-file-prescription"
+          />{" "}
         </div>
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div className="navbar-nav">{this.renderView()}</div>

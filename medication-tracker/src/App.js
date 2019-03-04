@@ -13,7 +13,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      user: null
+      user: null,
+      alert: false
     };
     this.handleUserLogin = this.handleUserLogin.bind(this);
     this.handleUserRegistration = this.handleUserRegistration.bind(this);
@@ -32,39 +33,6 @@ class App extends React.Component {
     firebase.initializeApp(config);
   }
 
-  // componentWillUpdate() {
-  //   this.verifyUser();
-  // }
-
-  // verifyUser = () => {
-  //   firebase.auth().onAuthStateChanged(function(user) {
-  //     if (user) this.setState({ isLoggedIn: true, user: user });
-  //     else this.setState({ user: null });
-  //   });
-  // };
-
-  // verifyLogin() {
-  //   var ui = new firebase.auth.AuthUI(firebase.auth());
-  //   var uiConfig = {
-  //     callbacks: {
-  //       signInSuccessWithAuthResult: function() {
-  //         this.setState({ isLoggedIn: true });
-  //       },
-  //       uiShown: function() {
-  //         document.getElementById("loader").style.diplay = "none";
-  //       }
-  //     },
-  //     signInFlow: "popup",
-  //     signInSuccessUrl: "localhost:3000",
-  //     signInOptions: [
-  //       {
-  //         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-  //         requireDisplayName: false
-  //       }
-  //     ]
-  //   };
-  //   ui.start("#firebase-auth-container", uiConfig);
-  // }
   handleUserLogin(user) {
     this.setState({ isLoggedIn: true, user: user });
   }
@@ -77,11 +45,20 @@ class App extends React.Component {
     this.setState({ isLoggedIn: false });
   }
 
+  sendAlert = alert => {
+    this.setState({ alert: alert });
+    firebase
+      .database()
+      .ref("alert")
+      .set({ alert: true, patient: this.state.user.name });
+    console.log(alert);
+  };
+
   renderView = () => {
     var user = this.state.user;
-    console.log(user);
     if (this.state.isLoggedIn === false) return <Welcome />;
-    else if (user.role === "patient") return <Patient user={this.state.user} />;
+    else if (user.role === "patient")
+      return <Patient user={this.state.user} sendAlert={this.sendAlert} />;
     else if (user.role === "healthcareProvider")
       return <HealthcareProvider user={this.state.user} />;
     else if (user.role === "careTaker")
@@ -90,7 +67,6 @@ class App extends React.Component {
   };
 
   render() {
-    // this.verifyUser();
     return (
       <React.Fragment>
         <NavBar

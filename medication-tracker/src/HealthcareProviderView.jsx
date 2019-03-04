@@ -1,6 +1,7 @@
 import React from "react";
 import firebase from "firebase";
 import MedicationCounters from "./MedicationCounters";
+import PatientMedication from "./PatientMedication";
 
 class HealthcareProvider extends React.Component {
   constructor(props) {
@@ -12,8 +13,9 @@ class HealthcareProvider extends React.Component {
         { key: "PeterQuill", name: "Peter Quill" }
       ],
       patientsPopulated: false,
-      name: "Steven Strange",
+      name: "",
       patient: "",
+      alert: { exists: true, patient: "Peter Parker" },
       medications: [
         {
           id: 1,
@@ -53,35 +55,16 @@ class HealthcareProvider extends React.Component {
           name: "Lipitor",
           dosage: "20 mg",
           image: "./images/lipitor.jpg",
-          time: ""
+          time: "",
+          editMedications: false,
+          viewMedications: false
         }
       ]
     };
     this.renderPatients = this.renderPatients.bind(this);
-    this.selectMedicationView = this.selectMedicationView.bind(this);
+    this.handleDataChange = this.handleDataChange.bind(this);
     this.viewMedications = this.viewMedications.bind(this);
   }
-
-  // retrievePatients = () => {
-  // componentWillMount() {
-  //   let database = firebase.database();
-  //   var childData;
-  //   var route = this.state.route;
-  //   database.ref(route).once("value", snapshot => {
-  //     var userPatients = [];
-  //     let i = 0;
-  //     snapshot.forEach(function(childSnapshot) {
-  //       childData = {
-  //         key: i,
-  //         value: childSnapshot.val()
-  //       };
-  //       if (childData.healthcareProvider === this.state.name)
-  //         userPatients.push(childData) && i++;
-  //       else i++;
-  //     });
-  //     this.setState({ patients: userPatients, patientsPopulated: true });
-  //   });
-  // }
 
   renderPatients() {
     let patientHtml = this.state.patients.map(patient => {
@@ -94,26 +77,49 @@ class HealthcareProvider extends React.Component {
     return patientHtml;
   }
 
-  selectMedicationView() {
-    return <MedicationCounters />;
-  }
+  editMedications = () => {
+    this.setState({ editMedications: true, viewMedications: false });
+  };
 
   viewMedications = () => {
-    return this.state.medications.map(medication => {
+    this.setState({ viewMedications: true, editMedications: false });
+  };
+
+  renderMedicationView = () => {
+    if (this.state.editMedications)
       return (
-        <ul>
-          <div key={medication.id}>
-            <img
-              src={medication.image}
-              alt="medication"
-              height="50px"
-              width="50px"
-            />{" "}
-            {"  "} {medication.name} {"  "} {medication.dosage}
-          </div>
-        </ul>
+        <div>
+          <MedicationCounters />
+        </div>
       );
-    });
+    else if (this.state.viewMedications)
+      return (
+        <div>
+          <PatientMedication />
+        </div>
+      );
+    else return <div>Select view</div>;
+  };
+
+  getAlerts = () => {
+    if (this.state.alert.exists)
+      return (
+        <div>
+          <h2 style={{ color: "red" }}>
+            Please follow up with {this.state.alert.patient}
+          </h2>
+        </div>
+      );
+    else
+      return (
+        <div>
+          <h3>No alerts at this time.</h3>
+        </div>
+      );
+  };
+  resetAlert = () => {
+    var alert = { exists: false, patient: null };
+    this.setState({ alert: alert });
   };
 
   handleDataChange(e) {
@@ -123,13 +129,13 @@ class HealthcareProvider extends React.Component {
   }
 
   render() {
-    console.log(this.state.patient);
+    console.log(this.state.alert);
     // this.retrievePatients();
     if (this.state.patient === "" && this.state.patients !== null)
       return (
         <React.Fragment>
           <div className="main">
-            <h2>Healthcare Provider view...</h2>
+            <h2>Patient alerts: {this.getAlerts()}</h2>
             <form className="select patient" onChange={this.handleDataChange}>
               <select
                 name="patient"
@@ -155,23 +161,30 @@ class HealthcareProvider extends React.Component {
       return (
         <React.Fragment>
           <div>
+            <h2>Patient alerts: {this.getAlerts()}</h2>
+            <button
+              className="btn btn-warning btn-md m-2"
+              onClick={this.resetAlert}
+            >
+              Reset Alert
+            </button>
             <h2>{this.state.patient}</h2>
             <br />
             <button
               className="btn btn-primary btn-md m-2"
-              onClick={e => this.viewMedications.bind(e)}
+              onClick={this.viewMedications}
             >
               View Patient Medications
             </button>
             <span>{"  "}</span>
             <button
               className="btn btn-primary btn-md m-2"
-              onClick={e => this.selectMedicationView.bind(e)}
+              onClick={this.editMedications}
             >
               Edit Medication Schedule
             </button>
             <br />
-            {this.viewMedications()}
+            {this.renderMedicationView()}
           </div>
         </React.Fragment>
       );
