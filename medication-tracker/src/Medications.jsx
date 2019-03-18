@@ -216,7 +216,7 @@ class Medications extends Component {
           <button
             className="btn btn-success"
             onClick={this.handleComplete}
-            style={{ fontSize: "30px" }}
+            style={{ fontSize: "30px", margin: "20px" }}
           >
             Complete
           </button>
@@ -224,7 +224,7 @@ class Medications extends Component {
           <button
             className="btn btn-danger"
             onClick={this.handleIssue}
-            style={{ fontSize: "30px" }}
+            style={{ fontSize: "30px", margin: "20px" }}
           >
             Issue
           </button>
@@ -240,23 +240,29 @@ class Medications extends Component {
             <tr>
               <td>
                 <span key={counter.id}>
-                  <h2>
-                    <span />
-                    <img
-                      src={require(`${counter.image}`)}
-                      alt="medication"
-                      height="50"
-                      width="50"
-                    />
-                    {counter.name}
+                  <img
+                    src={require(`${counter.image}`)}
+                    alt="medication"
+                    height="60"
+                    width="60"
+                  />
+                  <h2
+                    className="badge badge-info"
+                    style={{
+                      borderRadius: "50%",
+                      fontSize: "24px",
+                      margin: "20px"
+                    }}
+                  >
+                    {counter.quantity}
                   </h2>
                 </span>
               </td>
               <td>
-                <h2 style={{ margin: "40px" }}>{counter.dosage}</h2>
+                <h2>{counter.name}</h2>
               </td>
               <td>
-                <h2 style={{ margin: "40px" }}>{counter.quantity}</h2>
+                <h2 style={{ margin: "20px" }}>{counter.dosage}</h2>
               </td>
             </tr>
           </div>
@@ -269,23 +275,29 @@ class Medications extends Component {
             <tr>
               <td>
                 <span key={counter.id}>
-                  <h2>
-                    <span />
-                    <img
-                      src={require(`${counter.image}`)}
-                      alt="medication"
-                      height="50"
-                      width="50"
-                    />
-                    {counter.name}
+                  <img
+                    src={require(`${counter.image}`)}
+                    alt="medication"
+                    height="60"
+                    width="60"
+                  />
+                  <h2
+                    className="badge badge-info"
+                    style={{
+                      borderRadius: "50%",
+                      fontSize: "24px",
+                      margin: "20px"
+                    }}
+                  >
+                    {counter.quantity}
                   </h2>
                 </span>
               </td>
               <td>
-                <h2 style={{ margin: "40px" }}>{counter.dosage}</h2>
+                <h2>{counter.name}</h2>
               </td>
               <td>
-                <h2 style={{ margin: "40px" }}>{counter.quantity}</h2>
+                <h2 style={{ margin: "20px" }}>{counter.dosage}</h2>
               </td>
             </tr>
           </div>

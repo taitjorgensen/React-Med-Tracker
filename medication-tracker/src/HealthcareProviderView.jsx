@@ -1,5 +1,4 @@
 import React from "react";
-import firebase from "firebase";
 import MedicationCounters from "./MedicationCounters";
 import PatientMedication from "./PatientMedication";
 
@@ -98,7 +97,12 @@ class HealthcareProvider extends React.Component {
           <PatientMedication />
         </div>
       );
-    else return <div>Select view</div>;
+    else
+      return (
+        <div>
+          <h2>Select view</h2>
+        </div>
+      );
   };
 
   getAlerts = () => {
