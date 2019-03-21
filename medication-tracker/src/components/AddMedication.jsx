@@ -101,7 +101,7 @@ class AddMedication extends React.Component {
         key: 3,
         id: "lipitor",
         value: "lipitor",
-        images: "../images/lipitor.jpg",
+        image: "../images/lipitor.jpg",
         name: "Lipitor"
       },
       {
@@ -158,7 +158,9 @@ class AddMedication extends React.Component {
                   >
                     <option value="" />
                     {options.map(option => (
-                      <option key={option.key}>{option.image}</option>
+                      <option key={option.key} value="Select Image File">
+                        {option.image}
+                      </option>
                     ))}
                   </select>
                   <input

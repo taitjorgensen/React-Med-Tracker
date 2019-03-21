@@ -1,6 +1,7 @@
 import React from "react";
 import MedicationCounters from "./MedicationCounters";
 import PatientMedication from "./PatientMedication";
+import AddMedication from "./components/AddMedication";
 
 class HealthcareProvider extends React.Component {
   constructor(props) {
@@ -14,6 +15,9 @@ class HealthcareProvider extends React.Component {
       patientsPopulated: false,
       name: "",
       patient: "",
+      addMedication: false,
+      editMedications: false,
+      viewMedications: false,
       alert: { exists: true, patient: "Peter Parker" },
       medications: [
         {
@@ -54,9 +58,7 @@ class HealthcareProvider extends React.Component {
           name: "Lipitor",
           dosage: "20 mg",
           image: "./images/lipitor.jpg",
-          time: "",
-          editMedications: false,
-          viewMedications: false
+          time: ""
         }
       ]
     };
@@ -77,11 +79,31 @@ class HealthcareProvider extends React.Component {
   }
 
   editMedications = () => {
-    this.setState({ editMedications: true, viewMedications: false });
+    this.setState({
+      editMedications: true,
+      viewMedications: false,
+      addMedication: false
+    });
   };
 
   viewMedications = () => {
-    this.setState({ viewMedications: true, editMedications: false });
+    this.setState({
+      viewMedications: true,
+      editMedications: false,
+      addMedication: false
+    });
+  };
+
+  addMedication = () => {
+    this.setState({
+      addMedication: true,
+      editMedications: false,
+      viewMedications: false
+    });
+  };
+
+  openModal = () => {
+    return true;
   };
 
   renderMedicationView = () => {
@@ -95,6 +117,12 @@ class HealthcareProvider extends React.Component {
       return (
         <div>
           <PatientMedication />
+        </div>
+      );
+    else if (this.state.addMedication)
+      return (
+        <div>
+          <AddMedication openModal={this.openModal} />
         </div>
       );
     else
@@ -186,6 +214,12 @@ class HealthcareProvider extends React.Component {
               onClick={this.editMedications}
             >
               Edit Medication Schedule
+            </button>
+            <button
+              className="btn btn-primary btn-md m-2"
+              onClick={this.addMedication}
+            >
+              Add Medication
             </button>
             <br />
             {this.renderMedicationView()}

@@ -31,8 +31,8 @@ class CareTaker extends React.Component {
   addMedication = () => {
     this.setState({
       addMedication: true,
-      editMedication: false,
-      viewMedication: false
+      editMedications: false,
+      viewMedications: false
     });
   };
 
