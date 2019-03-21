@@ -1,7 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
 import firebase from "firebase";
-import patient from "../Patient";
 
 const customStyles = {
   content: {
@@ -17,23 +16,20 @@ const customStyles = {
 
 Modal.setAppElement("#root");
 
-class Register extends React.Component {
+class AddMedication extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalIsOpen: false,
-      route: "users",
+      modalIsOpen: this.props.openModal,
+      route: "medications",
       data: {
-        email: "",
-        password: "",
-        role: "",
         name: "",
-        phoneNumber: "",
-        patientName: ""
+        dosage: "",
+        image: ""
       },
       errors: {},
-      id: "Register New User",
-      instructions: "Please enter information to register"
+      id: "Add Medication",
+      instructions: "Please enter information to add medication"
     };
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
@@ -87,24 +83,52 @@ class Register extends React.Component {
 
   render() {
     let options = [
-      { key: 1, id: "role", value: "patient", name: "Patient" },
+      {
+        key: 1,
+        id: "b12",
+        value: "b12",
+        image: "../images/b12.jpg",
+        name: "B12"
+      },
       {
         key: 2,
-        id: "role",
-        value: "healthcareProvider",
-        name: "Healthcare Provider"
+        id: "heart",
+        value: "heart",
+        image: "../images/heart.jpg",
+        name: "Heart Medication"
       },
-      { key: 3, id: "role", value: "careTaker", name: "Care Taker" }
+      {
+        key: 3,
+        id: "lipitor",
+        value: "lipitor",
+        images: "../images/lipitor.jpg",
+        name: "Lipitor"
+      },
+      {
+        key: 4,
+        id: "neuro",
+        value: "neuro",
+        image: "../images/neuro.jpg",
+        name: "Neuro Inhibitor"
+      },
+      {
+        key: 5,
+        id: "yellow",
+        value: "yellow",
+        image: "../images/yellow.jpg",
+        name: "Yellow Tablet"
+      }
     ];
+
     return (
       <div>
         <div>
-          <h3
+          {/* <h3
             onClick={this.openModal}
             style={{ marginRight: 20, cursor: "pointer" }}
           >
             {this.state.id}
-          </h3>
+          </h3> */}
 
           <Modal
             isOpen={this.state.modalIsOpen}
@@ -114,7 +138,7 @@ class Register extends React.Component {
             style={customStyles}
             contentLabel="MyRx Modal"
             onSubmit={this.handleSubmit}
-            id="Register-Modal"
+            id="AddMedication-Modal"
           >
             <h2 ref={subtitle => (this.subtitle = subtitle)}>
               {this.state.id}
@@ -122,8 +146,8 @@ class Register extends React.Component {
             <center>
               <div>{this.state.instructions}</div>
 
-              <form id="register-form" onSubmit={this.handleSubmit}>
-                <div id="firebaseui-auth-container">
+              <form id="addMedication-form" onSubmit={this.handleSubmit}>
+                <div id="firebase-auth-container">
                   <select
                     name="role"
                     id="role"
@@ -134,56 +158,24 @@ class Register extends React.Component {
                   >
                     <option value="" />
                     {options.map(option => (
-                      <option key={option.key} value={option.value}>
-                        {option.name}
-                      </option>
+                      <option key={option.key}>{option.image}</option>
                     ))}
                   </select>
-                  <input
-                    name="email"
-                    id="email"
-                    style={{ marginTop: 5 }}
-                    placeholder="Email"
-                    type="text"
-                    value={this.input}
-                    onChange={this.handleDataChange.bind(this)}
-                  />{" "}
-                  <br />
-                  <input
-                    name="password"
-                    id="password"
-                    style={{ marginTop: 5 }}
-                    placeholder="Password"
-                    type="text"
-                    value={this.input}
-                    onChange={this.handleDataChange.bind(this)}
-                  />{" "}
-                  <br />
                   <input
                     name="name"
                     id="name"
                     style={{ marginTop: 5 }}
-                    placeholder="Name"
+                    placeholder="Name of Medication"
                     type="text"
                     value={this.input}
                     onChange={this.handleDataChange.bind(this)}
                   />{" "}
                   <br />
                   <input
-                    name="phoneNumber"
-                    id="phoneNumber"
+                    name="dosage"
+                    id="dosage"
                     style={{ marginTop: 5 }}
-                    placeholder="Phone Number"
-                    type="text"
-                    value={this.input}
-                    onChange={this.handleDataChange.bind(this)}
-                  />{" "}
-                  <br />
-                  <input
-                    name="patientName"
-                    id="patientName"
-                    style={{ marginTop: 5 }}
-                    placeholder="Patient Name or NA"
+                    placeholder="Dosage in mg"
                     type="text"
                     value={this.input}
                     onChange={this.handleDataChange.bind(this)}
@@ -210,51 +202,27 @@ class Register extends React.Component {
     );
   }
 
-  addUserToDb = data => {
+  addMedToDb = data => {
     console.log(data);
     firebase
       .database()
       .ref(this.state.route)
       .push()
       .set({
-        role: data.role,
-        email: data.email,
-        password: data.password,
         name: data.name,
-        phoneNumber: data.phoneNumber,
-        patientName: data.patientName
+        dosage: data.dosage,
+        image: data.image
       });
   };
-
-  handleRegister(email, password) {
-    var newUser;
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(cred => {
-        newUser = cred.user;
-        console.log(newUser);
-      })
-      .catch(function(error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        return errorCode && errorMessage;
-      });
-  }
 
   handleSubmit = event => {
     event.preventDefault();
     this.closeModal();
-    var newUser = {};
-    newUser = event.target.value;
-    this.setState({ data: newUser });
-    this.handleRegister(this.state.data.email, this.state.data.password);
-    this.addUserToDb(this.state.data);
-    var user = (newUser.name, newUser.role);
-    this.props.handleLogin(user);
-    if (this.state.data.role === "patient")
-      patient.createNewPatient(this.state.data.name, this.state.data.email);
+    var newMed = {};
+    newMed = event.target.value;
+    this.setState({ data: newMed });
+    this.addMedToDb(this.state.data);
   };
 }
 
-export default Register;
+export default AddMedication;

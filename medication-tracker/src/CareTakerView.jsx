@@ -1,21 +1,43 @@
 import React from "react";
 import MedicationCounters from "./MedicationCounters";
-import PatientMedication from "./PatientMedication";
+import Medications from "./Medications";
+import AddMedication from "./components/AddMedication";
 
 class CareTaker extends React.Component {
   state = {
     alert: { exists: true, patient: "Peter Parker" },
     viewMedications: false,
     editMedications: false,
+    addMedication: false,
     patient: "Peter Parker"
   };
 
   editMedications = () => {
-    this.setState({ editMedications: true, viewMedications: false });
+    this.setState({
+      editMedications: true,
+      viewMedications: false,
+      addMedication: false
+    });
   };
 
   viewMedications = () => {
-    this.setState({ viewMedications: true, editMedications: false });
+    this.setState({
+      viewMedications: true,
+      editMedications: false,
+      addMedication: false
+    });
+  };
+
+  addMedication = () => {
+    this.setState({
+      addMedication: true,
+      editMedication: false,
+      viewMedication: false
+    });
+  };
+
+  openModal = () => {
+    return true;
   };
 
   resetAlert = () => {
@@ -33,10 +55,21 @@ class CareTaker extends React.Component {
     else if (this.state.viewMedications)
       return (
         <div>
-          <PatientMedication />
+          <Medications />
         </div>
       );
-    else return <div>Select view</div>;
+    else if (this.state.addMedication)
+      return (
+        <div>
+          <AddMedication openModal={this.openModal} />
+        </div>
+      );
+    else
+      return (
+        <div>
+          <h2>Make Selection to View, Edit, or Add Medication</h2>
+        </div>
+      );
   };
 
   getAlerts = () => {
@@ -82,6 +115,12 @@ class CareTaker extends React.Component {
               onClick={this.editMedications}
             >
               Edit Medication Schedule
+            </button>
+            <button
+              className="btn btn-primary btn-md m-2"
+              onClick={this.addMedication}
+            >
+              Add Medication
             </button>
             <br />
             {this.renderMedicationView()}

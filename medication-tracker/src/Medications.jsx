@@ -6,17 +6,17 @@ class Medications extends Component {
       {
         id: 1,
         quantity: 1,
-        name: "Yellow Tablet",
-        dosage: "50 mg",
-        image: "./images/yellow.jpg",
+        name: "Heart Medication",
+        dosage: "100 mg",
+        image: "./images/heart.jpg",
         time: ""
       },
       {
         id: 2,
         quantity: 1,
-        name: "Heart Medication",
-        dosage: "100 mg",
-        image: "./images/heart.jpg",
+        name: "Yellow Tablet",
+        dosage: "50 mg",
+        image: "./images/yellow.jpg",
         time: ""
       },
       {
